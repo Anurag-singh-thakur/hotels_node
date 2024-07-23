@@ -10,7 +10,7 @@ const bodyParser = require("body-parser");
 
 app.use(bodyParser.json()); // store the data in the req.body (Request body)
 app.get("/", (req, res) => {
-  res.send("Welcome to my Hotel, How can I help you?");
+  res.send("Welcome to our Hotel");
 });
 
 //   app.get('/chicken', function (req, res) {
@@ -82,32 +82,32 @@ app.get("/", (req, res) => {
 //   }
 // });
 
-app.post("/menu", async (req, res) => {
-  try {
-    const Data = req.body; //Assuming the request body contains the menu data
-    //create a new MenuItem document using mongoose model
+// app.post("/menu", async (req, res) => {
+//   try {
+//     const Data = req.body; //Assuming the request body contains the menu data
+//     //create a new MenuItem document using mongoose model
 
-    const newMenu = new MenuItem(Data);
+//     const newMenu = new MenuItem(Data);
 
-    const response = await newMenu.save();
-    console.log("data saved2 ", response);
-    res.status(200).json(response);
-  } catch (err) {
-    console.log("error2");
-    res.status(500).json({ error: "internal server error2" });
-  }
-});
+//     const response = await newMenu.save();
+//     console.log("data saved2 ", response);
+//     res.status(200).json(response);
+//   } catch (err) {
+//     console.log("error2");
+//     res.status(500).json({ error: "internal server error2" });
+//   }
+// });
 
-app.get("/menu", async (req, res) => {
-  try {
-    const Data = await MenuItem.find();
-    console.log("data fetched2");
-    res.status(200).json(Data);
-  } catch (err) {
-    console.log("error ");
-    res.status(500).json({ error: "internal server error" });
-  }
-});
+// app.get("/menu", async (req, res) => {
+//   try {
+//     const Data = await MenuItem.find();
+//     console.log("data fetched2");
+//     res.status(200).json(Data);
+//   } catch (err) {
+//     console.log("error ");
+//     res.status(500).json({ error: "internal server error" });
+//   }
+// });
 
 // app.get("/person/:workType", async (req, res) => {
 //   try {
@@ -128,6 +128,14 @@ app.get("/menu", async (req, res) => {
 
 const personRoutes = require('./Routes/personRoutes')
 app.use('/person' , personRoutes);
+
+
+const menuItemRoutes = require('./Routes/menuItemRoutes')
+app.use('/menu' , menuItemRoutes);
+
+
+//all the commented code is moved to the routes using express routes so it is working same even if it is not commented and routes files are not defined .
 app.listen(3000, () => {
   console.log("server is listening on port 3000!");
 });
+
