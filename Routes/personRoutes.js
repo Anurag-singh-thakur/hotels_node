@@ -82,7 +82,7 @@ router.put('/:id', async (req, res) => {
         error: "Person not found with this ID"
       })
     }
-    console.log("data updated");
+    console.log("data updated ",response);
     res.status(200).json(response);
   } catch (err) {
     console.log("error ", err);
