@@ -71,16 +71,19 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const menuId = req.params.id;
-    const response = await MenuItem.findByIdAndRemove(menuId);
 
+    //asumming you have a MenuItem model
+    const response = await MenuItem.findByIdAndRemove(menuId);
     if (!response) {
-      return res.status(404).json({ error: "Menu item not found with this ID" });
+      return res.status(404).json({
+        error: "Person not found with this ID",
+      });
     }
-    console.log("Data deleted");
-    res.status(200).json({ message: "Menu deleted successfully" });
+    console.log("menu deleted ");
+    res.status(200).json({message :"menu deleted successfully"});
   } catch (err) {
-    console.log("Error: ", err);
-    res.status(500).json({ error: "Internal server error" });
+    console.log("error ", err);
+    res.status(500).json({ error: "internal server error" });
   }
 });
 
