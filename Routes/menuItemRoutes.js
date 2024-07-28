@@ -2,50 +2,86 @@ const express = require("express");
 const router = express.Router();
 const MenuItem = require("../models/MenuItem");
 
+// Create a new menu item
 router.post("/", async (req, res) => {
   try {
-    const Data = req.body; //Assuming the request body contains the menu data
-    //create a new MenuItem document using mongoose model
-
-    const newMenu = new MenuItem(Data);
-
+    const data = req.body; // Assuming the request body contains the menu data
+    const newMenu = new MenuItem(data);
     const response = await newMenu.save();
-    console.log("data saved2 ", response);
+    console.log("Data saved: ", response);
     res.status(200).json(response);
   } catch (err) {
-    console.log("error2");
-    res.status(500).json({ error: "internal server error2" });
+    console.log("Error: ", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
+// Get all menu items
 router.get("/", async (req, res) => {
   try {
-    const Data = await MenuItem.find();
-    console.log("data fetched2");
-    res.status(200).json(Data);
+    const data = await MenuItem.find();
+    console.log("Data fetched");
+    res.status(200).json(data);
   } catch (err) {
-    console.log("error ");
-    res.status(500).json({ error: "internal server error" });
+    console.log("Error: ", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-router.get("/:Taste", async (req, res) => {
+// Get menu items by taste
+router.get("/:taste", async (req, res) => {
   try {
-    const Taste = req.params.Taste;
-    if (Taste == "spicy" || Taste == "sweet" || Taste == "sour") {
-      const response = await MenuItem.find({ taste: Taste });
-      console.log("response fetched");
-      console.log(response, "response");
+    const taste = req.params.taste;
+    if (["spicy", "sweet", "sour"].includes(taste)) {
+      const response = await MenuItem.find({ taste });
+      console.log("Response fetched");
       res.status(200).json(response);
     } else {
-      res
-        .status(404)
-        .json({ error: "Food item is not available for this taste " });
+      res.status(404).json({ error: "Food item is not available for this taste" });
     }
   } catch (err) {
-    console.log("error ", err);
-    res.status(500).json({ error: "internal server error" });
+    console.log("Error: ", err);
+    res.status(500).json({ error: "Internal server error" });
   }
 });
 
-module.exports = router; 
+// Update a menu item by ID
+router.put("/:id", async (req, res) => {
+  try {
+    const menuId = req.params.id;
+    const updatedMenu = req.body;
+
+    const response = await MenuItem.findByIdAndUpdate(menuId, updatedMenu, {
+      new: true,
+      runValidators: true,
+    });
+
+    if (!response) {
+      return res.status(404).json({ error: "Menu item not found with this ID" });
+    }
+    console.log("Data updated: ", response);
+    res.status(200).json(response);
+  } catch (err) {
+    console.log("Error: ", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+// Delete a menu item by ID
+router.delete("/:id", async (req, res) => {
+  try {
+    const menuId = req.params.id;
+    const response = await MenuItem.findByIdAndRemove(menuId);
+
+    if (!response) {
+      return res.status(404).json({ error: "Menu item not found with this ID" });
+    }
+    console.log("Data deleted");
+    res.status(200).json({ message: "Menu deleted successfully" });
+  } catch (err) {
+    console.log("Error: ", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+module.exports = router;
