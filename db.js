@@ -6,8 +6,8 @@ require("dotenv").config();
 
 //const mongoURL = "mongodb://127.0.0.1:27017/hotels";//(localhost/local database)
 // const mongoURL = "mongodb+srv://hotels:node_hotels@hotels.fx1g7xr.mongodb.net/";  //("online database")
-//const mongoURL = process.env.MONGODB_URL_LOCAL 
-const mongoURL = process.env.MONGODB_URL ;
+const mongoURL = process.env.MONGODB_URL_LOCAL 
+// const mongoURL = process.env.MONGODB_URL ;
 //Connect to MongoDB 
 mongoose.connect(mongoURL, {
   useNewUrlParser: true,
